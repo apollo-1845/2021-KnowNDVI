@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from sensors import Sensor 
+from sensors.sensor import Sensor
 
 class Camera(Sensor):
  
