@@ -24,3 +24,4 @@ class CameraData(Data):
 class Camera(Sensor):
     def capture_data(self):
         pass
+    
