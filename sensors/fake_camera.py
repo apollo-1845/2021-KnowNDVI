@@ -1,5 +1,5 @@
 import cv2
-import numpy
+import numpy as np
 import requests
 
 from project_types import Sensor
@@ -34,7 +34,7 @@ class FakeCamera(Sensor):
 
     def set_image_by_bytes(self, bytes_in: bytes):
         """Store the bytes representing an image as an opencv image"""
-        array_resp = numpy.array(list(bytes_in), numpy.uint8)
+        array_resp = np.array(list(bytes_in), np.uint8)
         # Convert to OpenCV Image
         self.image = cv2.imdecode(array_resp, cv2.IMREAD_UNCHANGED)
 

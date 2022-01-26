@@ -9,10 +9,14 @@ class Data(ABC):
 
     @abstractmethod
     def serialise(self) -> bytes:
+        """returns a resource locator if it is saved in a separate file
+        otherwise returns the value as a byte stream"""
         pass
 
+    @staticmethod
     @abstractmethod
-    def deserialise(self, b: bytes):
+    def deserialise(b: bytes):
+        """Returns the value represented by the bytes"""
         pass
 
 
