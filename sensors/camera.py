@@ -13,11 +13,14 @@ def test_camera_data_dimensions(shape):
 class CameraData(Data):
     image = None
 
+
     def __init__(self, image):
         self.image = image
 
+
     def get_raw(self):
         return self.image
+
 
     def serialise(self) -> bytes:
         shape = self.image.shape
