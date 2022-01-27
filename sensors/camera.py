@@ -53,7 +53,7 @@ class CameraData(Data):
         return CameraData(data)
 
     def __repr__(self):
-        return f"{self.image}"
+        return f"Camera data: {self.image}"
 
 
 class Camera(Sensor):

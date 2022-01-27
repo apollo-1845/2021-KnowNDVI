@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import numpy as np
 from abc import ABC, abstractmethod
 
 
@@ -24,3 +25,6 @@ class Sensor(ABC):
     @abstractmethod
     def capture_data(self):
         pass
+
+def get_len_bytes(data):
+    return np.uint32(len(data)).tobytes()

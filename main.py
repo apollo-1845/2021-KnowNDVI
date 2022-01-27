@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
-import numpy as np
 from sensors.fake_camera import FakeCamera
 from sensors.camera import CameraData
+from sensors.timestamp import VirtualTimeStampSensor
+
+import numpy as np
+
+from project_types import get_len_bytes
 
 file_dir = "./out/out.blob"
 
@@ -26,7 +30,9 @@ if __name__ == "__main__":
         pass
     # setup
     fake_camera = FakeCamera()
-    sensors = [fake_camera]
+    virtual_time_stamp_sensor = VirtualTimeStampSensor()
+    # NOTE: the order matters
+    sensors = [virtual_time_stamp_sensor, fake_camera]
     current_data = []
 
     # data collection loop
@@ -39,7 +45,7 @@ if __name__ == "__main__":
     # deserialised_data_pieces = [
     #     CameraData.deserialise(d) for d in serialised_data_pieces
     # ]
-    test_camera_data_serialisation(current_data[0], serialised_data_pieces[0])
+    test_camera_data_serialisation(current_data[1], serialised_data_pieces[1])
 
     # record the data into a file
     # TODO: maybe there is a more effecient way
@@ -47,9 +53,10 @@ if __name__ == "__main__":
         # indicate the data "length" for each data piece
         out_data = bytes()
 
-        for data_piece in serialised_data_pieces:
-            length = np.uint32(len(data_piece))
-            out_data += length.tobytes()
+        for i, data_piece in enumerate(serialised_data_pieces):
+            out_data += np.uint8(i).tobytes()
+            out_data += get_len_bytes(data_piece)
+
             out_data += data_piece
 
         out_file.write(out_data)
