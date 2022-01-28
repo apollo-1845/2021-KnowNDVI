@@ -64,14 +64,14 @@ class Camera(Sensor):
     def capture_data(self):
         # initialize camera + take reference to the raw camera capture
         self.camera = PiCamera()
-        camera.resoultion = (640, 480)
-        camera.framerate = 32
-        rawCamera = PiRGBArray(camera, size=(640, 480))
+        self.camera.resolution = (640, 480)
+        self.camera.framerate = 32
+        rawCamera = PiRGBArray(self.camera, size=(640, 480))
         # warm up
         time.sleep(0.1)
         
-        # capture frames from camera
-        for frame in camera.capture_continuous(rawCapture, fromat="bgr", use_video_port=True):
+        # capture frames from self.camera
+        for frame in self.camera.capture_continuous(rawCapture, fromat="bgr", use_video_port=True):
             #take raw numpy array then initalize timestamp + occupied/unoccupied text
             image = frame.array
             # show frame
