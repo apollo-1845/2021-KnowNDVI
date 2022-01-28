@@ -72,7 +72,7 @@ class Camera(Sensor):
         
         # capture frames from camera
         for frame in camera.capture_continuous(rawCapture, fromat="bgr", use_video_port=True):
-            #take raw numpy array tehn initalize timestamp + occupied/unoccupied text
+            #take raw numpy array then initalize timestamp + occupied/unoccupied text
             image = frame.array
             # show frame
             cv2.imshow("Frame", image)
