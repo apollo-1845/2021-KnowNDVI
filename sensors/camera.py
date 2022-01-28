@@ -1,6 +1,10 @@
 from abc import ABC, abstractmethod
 from project_types import Data, Sensor
 import numpy as np
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+import time
+import cv2
 
 
 def test_camera_data_dimensions(shape):
@@ -58,4 +62,20 @@ class CameraData(Data):
 
 class Camera(Sensor):
     def capture_data(self):
-        pass
+        # initialize camera + take reference to the raw camera capture
+        self.camera = PiCamera()
+        camera.resoultion = (640, 480)
+        camera.framerate = 32
+        rawCamera = PiRGBArray(camera, size=(640, 480))
+        # warm up
+        time.sleep(0.1)
+        
+        # capture frames from camera
+        for frame in camera.capture_continuous(rawCapture, fromat="bgr", use_video_port=True):
+            #take raw numpy array tehn initalize timestamp + occupied/unoccupied text
+            image = frame.array
+            # show frame
+            cv2.imshow("Frame", image)
+            key = cv2.waitKey(1) & 0xFF
+            # clear stream in prep for next frame
+            rawCapture.truncate(0)
