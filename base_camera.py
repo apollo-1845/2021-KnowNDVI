@@ -58,7 +58,15 @@ class CameraData(Data):
     """NDVI conversion"""
 
     def to_NDVI(self):
-        nir, _, vis = cv2.split(self.image) # Image
+        nir, _, vis = cv2.split(self.image) # Image channels BRG
+        total = ndvi + vis
+        total[total==0] = 0.01 # No div by 0
+
+        # More NIR = plants
+        ndvi = (nir - vis) / total
+
+        self.image = ndvi
+
 
 
 def test_camera_data_dimensions(shape):
