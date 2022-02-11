@@ -4,7 +4,7 @@ import requests
 
 from project_types import Sensor
 
-from sensors.camera import CameraData
+from base_camera import CameraData
 
 
 class FakeCamera(Sensor):

@@ -1,3 +1,6 @@
+import numpy as np
+from project_types import Data
+
 #common class to both fake camera and real camera
 class CameraData(Data):
     image = None
@@ -44,8 +47,8 @@ class CameraData(Data):
     def __repr__(self):
         return f"Camera data: {self.image}"
     
-    def test_camera_data_dimensions(shape):
+def test_camera_data_dimensions(shape):
     if len(shape) != 3:
         raise Exception(
-            f"Camera data image does not have 3 dimensions. The actual number is {len(shape)}"
-        )
+        f"Camera data image does not have 3 dimensions. The actual number is {len(shape)}"
+    )
