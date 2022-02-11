@@ -1,13 +1,7 @@
-from fake_camera import FakeCamera
-
 #!/usr/bin/env python3
-from sensors.fake_camera import FakeCamera
-from sensors.camera import CameraData
-from sensors.timestamp import VirtualTimeStampSensor
-
-import numpy as np
-
-from project_types import get_len_bytes
+from sensors.fake_camera import FakeCamera as Camera  # Local
+from sensors.camera import Camera as Camera  # On Astro Pi
+from sensors.base_camera import CameraData
 
 file_dir = "./out/out.blob"
 
@@ -18,9 +12,9 @@ def test_camera_data_serialisation(original, serialised):
         raise Exception(f"Unexpected camera data deserialisation result: {result_image}, expected {original.image}")
 
 def check_camera():
-    fake_camera = FakeCamera()
-    fake_camera.set_id(103)
-    photo = fake_camera.capture_data()
+    camera = Camera()
+    camera.set_id(103)
+    photo = camera.capture_data()
     photo.display()
 
 
@@ -39,10 +33,10 @@ if __name__ == "__main__":
     except:
         pass
     # setup
-    fake_camera = FakeCamera()
+    camera = Camera()
     virtual_time_stamp_sensor = VirtualTimeStampSensor()
     # NOTE: the order matters
-    sensors = [virtual_time_stamp_sensor, fake_camera]
+    sensors = [virtual_time_stamp_sensor, camera]
     current_data = []
 
     # data collection loop

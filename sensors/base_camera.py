@@ -1,5 +1,5 @@
-from fake_camera import FakeCamera
 import numpy as np
+import cv2
 from project_types import Data
 
 #common class to both fake camera and real camera
@@ -52,15 +52,15 @@ class CameraData(Data):
         # Display with cv2
         title = self.__repr__()
         cv2.namedWindow(title)  # create window
-        cv2.imshow(title, image) # display image
+        cv2.imshow(title, self.image) # display image
         cv2.waitKey(0) # wait for key press
         cv2.destroyAllWindows()
 
-    """NDVI conversion"""
+    """NDVI conversion""" # TODO
 
     def to_NDVI(self):
         nir, _, vis = cv2.split(self.image) # Image channels BRG
-        total = ndvi + vis
+        total = nir + vis
         total[total==0] = 0.01 # No div by 0
 
         # More NIR = plants
