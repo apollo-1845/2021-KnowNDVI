@@ -43,8 +43,22 @@ class CameraData(Data):
 
     def __repr__(self):
         return f"Camera data: {self.image}"
-    
-    def test_camera_data_dimensions(shape):
+
+    def display(self):
+        # Display with cv2
+        title = self.__repr__()
+        cv2.namedWindow(title)  # create window
+        cv2.imshow(title, image) # display image
+        cv2.waitKey(0) # wait for key press
+        cv2.destroyAllWindows()
+
+    """NDVI conversion"""
+
+    def to_NDVI(self):
+        nir, _, vis = cv2.split(self.image) # Image
+
+
+def test_camera_data_dimensions(shape):
     if len(shape) != 3:
         raise Exception(
             f"Camera data image does not have 3 dimensions. The actual number is {len(shape)}"
