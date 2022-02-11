@@ -1,3 +1,5 @@
+from fake_camera import FakeCamera
+
 #!/usr/bin/env python3
 from sensors.fake_camera import FakeCamera
 from sensors.camera import CameraData
@@ -15,9 +17,17 @@ def test_camera_data_serialisation(original, serialised):
     if not(original.image == result_image).all():
         raise Exception(f"Unexpected camera data deserialisation result: {result_image}, expected {original.image}")
 
+def check_camera():
+    fake_camera = FakeCamera()
+    fake_camera.set_id(103)
+    photo = fake_camera.capture_data()
+    photo.display()
+
+
 
 if __name__ == "__main__":
-    # double-check the file - it should be empty
+    check_camera()
+    '''# double-check the file - it should be empty
     try:
         # would raise an error if the file does not exist
         with open(file_dir, "r") as f:
@@ -59,4 +69,5 @@ if __name__ == "__main__":
 
             out_data += data_piece
 
-        out_file.write(out_data)
+        out_file.write(out_data) '''
+
