@@ -1,3 +1,6 @@
+import numpy as np
+from project_types import Data
+
 #common class to both fake camera and real camera
 class CameraData(Data):
     image = None
