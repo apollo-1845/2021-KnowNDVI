@@ -1,3 +1,4 @@
+from fake_camera import FakeCamera
 import numpy as np
 from project_types import Data
 
