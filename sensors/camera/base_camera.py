@@ -3,7 +3,7 @@ import cv2
 from project_types import Data
 
 from sensors.camera.color_map import fastiecm
-from main import is_prod
+from is_prod import is_prod
 
 PREFERRED_RESOLUTION = (640, 480)
 

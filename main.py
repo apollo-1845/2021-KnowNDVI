@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-from sensors.camera import FakeCamera as Camera  # Local
+from sensors.camera.fake_camera import FakeCamera as Camera  # Local
 # from sensors.camera.camera import Camera as Camera  # On Astro Pi
-from sensors.base_camera import CameraData
+from sensors.camera.base_camera import CameraData
 from sensors.timestamp import VirtualTimeStampSensor
 import numpy as np
 from project_types import get_len_bytes
+from is_prod import is_prod
 
 file_dir = "./out/out.blob"
-
-is_prod = False
 
 def test_camera_data_serialisation(original, serialised):
     """Given original and serialised camera data, checks that deserialisation reverses serialisation."""
