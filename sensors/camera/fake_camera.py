@@ -43,4 +43,4 @@ class FakeCamera(Sensor):
         self.set_id(self.current_picture_id)
         # we need to get a number 1-250 inclusive, so wrap around
         self.current_picture_id = (self.current_picture_id + 1) % 249 + 1
-        return CameraData(self.image)
+        return CameraData.from_color_image(self.image)

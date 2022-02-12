@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
-if(__name__ == "__main__"):
-    # Import
-    from sensors.camera.fake_camera import FakeCamera as Camera  # Local
-    # from sensors.camera.camera import Camera as Camera  # On Astro Pi
-    from sensors.camera.base_camera import CameraData
-    from sensors.timestamp import VirtualTimeStampSensor
-    import numpy as np
-    from project_types import get_len_bytes
+from sensors.camera.fake_camera import FakeCamera as Camera  # Local
+# from sensors.camera.camera import Camera as Camera  # On Astro Pi
+from sensors.camera.base_camera import CameraData
+from sensors.timestamp import VirtualTimeStampSensor
+import numpy as np
+from project_types import get_len_bytes
+from settings import IS_PROD
 
 file_dir = "./out/out.blob"
-
-is_prod = False
 
 def test_camera_data_serialisation(original, serialised):
     """Given original and serialised camera data, checks that deserialisation reverses serialisation."""
     result_image = CameraData.deserialise(serialised).image
-    if not(original.image == result_image).all() and not is_prod:
+    if not(original.image == result_image).all() and not IS_PROD:
         raise Exception(f"Unexpected camera data deserialisation result: {result_image}, expected {original.image}")
 
 def check_camera():
@@ -24,7 +21,6 @@ def check_camera():
 
     photo = camera.capture_data()
     photo.display()
-
 
 
 if __name__ == "__main__":
@@ -55,6 +51,7 @@ if __name__ == "__main__":
 
         serialised_data_pieces = [d.serialise() for d in current_data]
         test_camera_data_serialisation(current_data[1], serialised_data_pieces[1])
+        # current_data[1].display()
 
         # record the data into a file
         # TODO: maybe there is a more efficient way
