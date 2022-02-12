@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-from sensors.fake_camera import FakeCamera as Camera  # Local
-from sensors.camera import Camera as Camera  # On Astro Pi
-from sensors.base_camera import CameraData
+from sensors.camera.fake_camera import FakeCamera as Camera  # Local
+# from sensors.camera.camera import Camera as Camera  # On Astro Pi
+from sensors.camera.base_camera import CameraData
 
 file_dir = "./out/out.blob"
 
@@ -13,8 +13,11 @@ def test_camera_data_serialisation(original, serialised):
 
 def check_camera():
     camera = Camera()
-    camera.set_id(103)
+    camera.current_picture_id = 103
+
     photo = camera.capture_data()
+    photo.display()
+    photo.to_NDVI()
     photo.display()
 
 

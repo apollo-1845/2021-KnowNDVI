@@ -1,14 +1,11 @@
-from abc import ABC, abstractmethod
 from project_types import Sensor
-from sensors.base_camera import camera
+from sensors.camera.base_camera import camera
 
-from picamera.array import PiRGBArray
 from picamera import PiCamera
-import time
-import cv2
 import numpy as np
 
 class Camera(Sensor):
+    """A physical camera using the Raspberry Pi's PiCamera API"""
     def __init__(self):
         # initialize camera
         self.camera = PiCamera()
