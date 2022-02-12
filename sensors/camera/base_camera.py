@@ -67,48 +67,19 @@ class CameraData(Data):
         cv2.waitKey(0) # wait for key press
         cv2.destroyAllWindows()
 
-    """NDVI conversion"""
-
-    def contrast(self):
-        """Apply contrast to the image to stretch the possible brightness ranges; used in NDVI"""
-        image = self.image
-        # Get boundaries
-        in_min = np.nanpercentile(image, 5)
-        in_max = np.nanpercentile(image, 95)
-        out_min = 0.0
-        out_max = 255.0
-        # Stretch to boundaries
-        result = image - in_min  # Now min is 0
-        result *= ((out_max - out_min) / (in_max - in_min))  # Divide away input range and then multiply in output range
-        result += in_min  # Now min is out_min m
-
-        self.image = result
+    """Onboard Processing"""
 
     def mask_cover(self):
         """Use a circular mask to remove camera cover"""
-        self.image = cv2.bitwise_and(self.image.astype("uint8"), self.image.astype("uint8"), mask=cam_cover_mask)
-        # TODO
+        # Mask out camera cover
+        self.image[cam_cover_mask == 0] = np.nan
+        print(self.image.shape, self.image)
 
-    def to_NDVI(self):
-        """Convert the image to an NDVI image, applying masks to filter out clouds/unreliable data"""
-        self.contrast()
-        nir, _, vis = cv2.split(self.image) # Image channels BRG
-        total = nir.astype(float) + vis.astype(float)
-        total[total == 0] = 0.01 # No div by 0
-
-        # More NIR = plants
-        ndvi = (nir.astype(float) - vis) / total
-
-        self.image = ndvi
-
-        # Geometrically mask out camera cover
-        self.mask_cover()
-
-        self.contrast()
 
 # Camera cover mask
-cam_cover_mask = np.zeros(PREFERRED_RESOLUTION, dtype="uint8")
-cv2.circle(cam_cover_mask, (875, 240), 250, 255) # White circle
+cam_cover_mask = np.zeros((480, 640), dtype="uint8")
+cv2.circle(cam_cover_mask, (320, 240), 250, 1, -1) # White circle
+print("Mask", cam_cover_mask)
 
 def test_camera_data_dimensions(shape):
     if len(shape) != 3:
