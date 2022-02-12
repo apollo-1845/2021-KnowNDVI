@@ -14,7 +14,7 @@ class FakeCamera(Sensor):
     image = None
 
     def set_id(self, img_id: int):
-        """Set the input image to a certain number id of the images in Data"""
+        """Set the input image to a certain number id of the images in https://github.com/raspberrypilearning/astropi-ndvi"""
         # Get data link
         url = f"https://github.com/raspberrypilearning/astropi-ndvi/blob/master/en/resources/cslab3ogel_Files_RawData_raw_image_{img_id}.jpeg?raw=true"
         self.set_image_by_url(url)
