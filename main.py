@@ -23,7 +23,6 @@ def check_camera():
     photo.display()
 
 
-
 if __name__ == "__main__":
     # check_camera()
     # double-check the file - it should be empty
@@ -52,6 +51,7 @@ if __name__ == "__main__":
 
         serialised_data_pieces = [d.serialise() for d in current_data]
         test_camera_data_serialisation(current_data[1], serialised_data_pieces[1])
+        # current_data[1].display()
 
         # record the data into a file
         # TODO: maybe there is a more efficient way

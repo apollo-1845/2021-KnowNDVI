@@ -59,13 +59,17 @@ class CameraData(Data):
         return f"Camera data: {self.image}"
 
     def display(self):
-        img = self.image
-        if(len(img.shape) == 2):
-            # One channel - apply color map
-            img = cv2.applyColorMap(img.astype(np.uint8), fastiecm)
+        img = self.image.copy()
+
+        # Fill the missing colour channel with zeroes
+        img = np.lib.pad(img, ((0,0), (0,0),(0,1)), 'constant', constant_values=(0))
+
+        # if(len(img.shape) == 2):
+        #     # One channel - apply color map
+        #     img = cv2.applyColorMap(img.astype(np.uint8), fastiecm)
 
         # Display with cv2
-        title = self.__repr__()
+        title = "Camera image preview"
         cv2.namedWindow(title)  # create window
         cv2.imshow(title, img) # display image
         cv2.waitKey(0) # wait for key press
@@ -100,7 +104,7 @@ class CameraData(Data):
 
 # Camera cover mask
 cam_cover_mask = np.zeros((480, 640), dtype="uint8")
-cv2.circle(cam_cover_mask, (320, 240), 250, 1, -1) # White circle
+cv2.circle(cam_cover_mask, (320, 240), 250, (255, 255, 255), -1) # White circle
 
 
 def test_camera_data_dimensions(shape):
