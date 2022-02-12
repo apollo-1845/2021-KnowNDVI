@@ -14,7 +14,7 @@ class CameraData(Data):
 
     def __init__(self, image):
         self.image = image
-        self.image = cv2.resize(self.image, PREFERRED_RESOLUTION) # Consistent sizing
+        self.process()
 
 
     def get_raw(self):
@@ -68,18 +68,31 @@ class CameraData(Data):
         cv2.destroyAllWindows()
 
     """Onboard Processing"""
+    def process(self):
+        """Onboard processing to compress image"""
+        # Resize
+        self.image = cv2.resize(self.image, PREFERRED_RESOLUTION)  # Consistent sizing
+        # 2 channels
+        self.dual_channel()
+        print(self.image.shape)
+        # Mask cover
+        self.mask_cover()
 
     def mask_cover(self):
         """Use a circular mask to remove camera cover"""
         # Mask out camera cover
-        self.image[cam_cover_mask == 0] = np.nan
+        self.image[cam_cover_mask == 0] = 0
         print(self.image.shape, self.image)
 
+    def dual_channel(self):
+        """Keep only NIR and VIS channels in this order"""
+        # Only blue (nir) and red (vis) channels
+        nir, _, vis = cv2.split(self.image)
+        self.image = cv2.merge(nir, vis)
 
 # Camera cover mask
 cam_cover_mask = np.zeros((480, 640), dtype="uint8")
 cv2.circle(cam_cover_mask, (320, 240), 250, 1, -1) # White circle
-print("Mask", cam_cover_mask)
 
 def test_camera_data_dimensions(shape):
     if len(shape) != 3:
