@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-from sensors.camera import FakeCamera as Camera  # Local
-# from sensors.camera.camera import Camera as Camera  # On Astro Pi
-from sensors.base_camera import CameraData
-from sensors.timestamp import VirtualTimeStampSensor
-import numpy as np
-from project_types import get_len_bytes
+if(__name__ == "__main__"):
+    # Import
+    from sensors.camera.fake_camera import FakeCamera as Camera  # Local
+    # from sensors.camera.camera import Camera as Camera  # On Astro Pi
+    from sensors.camera.base_camera import CameraData
+    from sensors.timestamp import VirtualTimeStampSensor
+    import numpy as np
+    from project_types import get_len_bytes
 
 file_dir = "./out/out.blob"
 

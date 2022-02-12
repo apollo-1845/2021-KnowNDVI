@@ -74,7 +74,7 @@ class CameraData(Data):
         # Resize
         self.image = cv2.resize(self.image, PREFERRED_RESOLUTION)  # Consistent sizing
         # 2 channels
-        self.dual_channel()
+        # self.dual_channel()
         print(self.image.shape)
         # Mask cover
         self.mask_cover()
@@ -82,6 +82,7 @@ class CameraData(Data):
     def mask_cover(self):
         """Use a circular mask to remove camera cover"""
         # Mask out camera cover
+        print(self.image.shape, cam_cover_mask.shape)
         self.image[cam_cover_mask == 0] = 0
         print(self.image.shape, self.image)
 
