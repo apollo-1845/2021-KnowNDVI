@@ -5,14 +5,14 @@ from sensors.camera.base_camera import CameraData
 from sensors.timestamp import VirtualTimeStampSensor
 import numpy as np
 from project_types import get_len_bytes
-from is_prod import is_prod
+from settings import IS_PROD
 
 file_dir = "./out/out.blob"
 
 def test_camera_data_serialisation(original, serialised):
     """Given original and serialised camera data, checks that deserialisation reverses serialisation."""
     result_image = CameraData.deserialise(serialised).image
-    if not(original.image == result_image).all() and not is_prod:
+    if not(original.image == result_image).all() and not IS_PROD:
         raise Exception(f"Unexpected camera data deserialisation result: {result_image}, expected {original.image}")
 
 def check_camera():
