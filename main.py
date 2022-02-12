@@ -21,8 +21,6 @@ def check_camera():
 
     photo = camera.capture_data()
     photo.display()
-    photo.to_NDVI()
-    photo.display()
 
 
 
