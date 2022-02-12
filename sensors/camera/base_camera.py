@@ -3,23 +3,24 @@ import cv2
 from project_types import Data
 
 from sensors.camera.color_map import fastiecm
+from main import is_prod
 
 PREFERRED_RESOLUTION = (640, 480)
 
-#common class to both fake camera and real camera
+
+# common class to both fake camera and real camera
 class CameraData(Data):
-    """A photo taken from a camera, with methods to convert to NDVI"""
+    """A photo taken from a camera, with methods to convert to NDVI."""
+
     image = None
 
-
     def __init__(self, image):
+        """Construct the image"""
         self.image = image
         self.image = cv2.resize(self.image, PREFERRED_RESOLUTION) # Consistent sizing
 
-
     def get_raw(self):
         return self.image
-
 
     def serialise(self) -> bytes:
         shape = self.image.shape
@@ -44,7 +45,7 @@ class CameraData(Data):
         subarray_type = np.dtype((np.uint8, tuple(shape[1:])))
         data = np.frombuffer(data_bytes, dtype=subarray_type)
 
-        if tuple(data.shape) != tuple(shape):
+        if tuple(data.shape) != tuple(shape) and not is_prod:
             raise Exception(
                 f"Unexpected data shape when deserialising camera data: {data.shape}, expected {shape}"
             )
@@ -106,12 +107,14 @@ class CameraData(Data):
 
         self.contrast()
 
+
 # Camera cover mask
 cam_cover_mask = np.zeros(PREFERRED_RESOLUTION, dtype="uint8")
 cv2.circle(cam_cover_mask, (875, 240), 250, 255) # White circle
 
+
 def test_camera_data_dimensions(shape):
-    if len(shape) != 3:
+    if len(shape) != 3 and not is_prod:
         raise Exception(
             f"Camera data image does not have 3 dimensions. The actual number is {len(shape)}"
         )
