@@ -1,16 +1,16 @@
 import time
 from datetime import datetime, timedelta
-start_time = datetime.now()  # Store start to keep track of time since start
 
 import numpy as np
 
 from project_types import get_len_bytes
 from sensors.camera.base_camera import CameraData
-from settings import OUT_FILE, IS_PROD, RUN_MINUTES, SECONDS_PER_ITERATION
+from settings import OUT_FILE, IS_PROD, EXPERIMENT_DURATION_MINUTES, SECONDS_PER_ITERATION
 
 # Import sensors
 from sensors.timestamp import VirtualTimeStampSensor
-if(IS_PROD):
+
+if IS_PROD:
     from sensors.camera.camera import Camera
 else:
     # Use testing camera
@@ -34,8 +34,14 @@ def collect_data(sensors, out_file):
     for sensor in sensors:
         current_data.append(sensor.capture_data())
 
+    # Don't have the data
+    for d in current_data:
+        if d.is_invalid():
+            print("Warning: some data is invalid")
+            return
+
     serialised_data_pieces = [d.serialise() for d in current_data]
-    # test_camera_data_serialisation(current_data[1], serialised_data_pieces[1])
+    test_camera_data_serialisation(current_data[1], serialised_data_pieces[1])
 
     # record the data into a file
     # TODO: maybe there is a more efficient way
@@ -43,18 +49,18 @@ def collect_data(sensors, out_file):
     out_data = bytes()
 
     for i, data_piece in enumerate(serialised_data_pieces):
-        if(not data_piece is None): # Don't add discarded data pieces
-            out_data += np.uint8(i).tobytes()
-            out_data += get_len_bytes(data_piece)
+        out_data += np.uint8(i).tobytes()
+        out_data += get_len_bytes(data_piece)
 
-            out_data += data_piece
+        out_data += data_piece
 
     out_file.write(out_data)
 
+
 # Outputting data into the ./out/ folder for analysis on Earth
-if(__name__ == "__main__"):
-    end_time = start_time + timedelta(minutes=RUN_MINUTES-(SECONDS_PER_ITERATION/60))  # Will start last iteration so does not overrun
-    print(start_time, end_time)
+if __name__ == "__main__":
+    start_time = datetime.now()  # Store start to keep track of time since start
+    end_time = start_time + timedelta(minutes=EXPERIMENT_DURATION_MINUTES-(SECONDS_PER_ITERATION/60))  # We want to stop slightly prematurely so that we don't overrun
 
     try:
         # would raise an error if the file does not exist
@@ -73,9 +79,9 @@ if(__name__ == "__main__"):
     sensors = [virtual_time_stamp_sensor, camera]
 
     now_time = datetime.now()
-    # Keep running while iteration
-    with open(OUT_FILE, "ab") as out_file:
-        while(now_time < end_time): # Until would overrun
+    while now_time < end_time: # Until would overrun
+        # open the file in every iteration so that if there is an exception (e.g. we have run out of space), the contents are synced into the file
+        with open(OUT_FILE, "ab") as out_file:
             # Main program
             collect_data(sensors, out_file)
             # Wait interval

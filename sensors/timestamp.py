@@ -9,6 +9,9 @@ import numpy as np
 class TimeStampData(Data):
     data = None
 
+    def is_invalid(self):
+        return self.data is None
+
     def __init__(self, _data):
         self.data = _data
 
