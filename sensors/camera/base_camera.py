@@ -55,15 +55,13 @@ class CameraData(Data):
         elif(USE_PNG):
             return self.serialise_save()
         else:
+            global save_id
+            file_id = save_id
+            np.savez_compressed(f"./out/cam_data_{file_id}.npz", data=self.image)
 
-            shape = self.image.shape
-            test_camera_data_dimensions(shape)
-            # 3 numbers
-            shape_bytes = np.array(shape, np.uint32).tobytes()
+            save_id += 1 # Next image
 
-            data_bytes = self.image.tobytes()
-
-            return shape_bytes + data_bytes
+            return int.to_bytes(file_id, length=(save_id.bit_length()+7)//8, byteorder='big')
 
     @staticmethod
     def deserialise(b):
@@ -71,27 +69,14 @@ class CameraData(Data):
             result = CameraData.deserialise_save(b)
             return result
         else:
-            # 3 numbers, 32 bits each
-            shape_data_border = 3 * 32 // 8
-            shape_bytes = b[0:shape_data_border]
-            data_bytes = b[shape_data_border:]
-
-            shape = np.frombuffer(shape_bytes, dtype=np.uint32)
-            test_camera_data_dimensions(shape)
-            # do not use the first shape number as it is the number of the sub-array units
-            subarray_type = np.dtype((np.uint8, tuple(shape[1:])))
-            data = np.frombuffer(data_bytes, dtype=subarray_type)
-
-            if tuple(data.shape) != tuple(shape) and not IS_PROD:
-                raise Exception(
-                    f"Unexpected data shape when deserialising camera data: {data.shape}, expected {shape}"
-                )
-
-            return CameraData.from_processed_np_array(data)
+            file_id = int.from_bytes(b, byteorder='big')
+            out = CameraData()
+            out.image = np.load(f"./out/cam_data_{file_id}.npz")["data"]
+            return out
 
     def serialise_save(self) -> bytes:
         global save_id
-        # As JPEG, return image ID
+        # As PNG, return image ID
         image_id = save_id
 
         nir, vis = cv2.split(self.image)

@@ -12,6 +12,14 @@ PREFERRED_RES_NP = (480, 640)  # Reverse - for creating NumPy arrays
 
 MASK = True
 CAN_DISCARD = True
+# Discard, PNG - 904K used
+# Discard, no PNG  - 1.1M used
+# No discard, PNG - 3.7M used
+# No discard, no PNG - 2.6M used
+#
+# Larger data set:
+# Discard, no PNG - 26M
+# Discard, PNG - 23M
 USE_PNG = True
 
 # Output
