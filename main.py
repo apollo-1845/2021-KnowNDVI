@@ -43,11 +43,10 @@ def collect_data(sensors, out_file):
     out_data = bytes()
 
     for i, data_piece in enumerate(serialised_data_pieces):
-        if(not data_piece is None): # Don't add discarded data pieces
-            out_data += np.uint8(i).tobytes()
-            out_data += get_len_bytes(data_piece)
+        out_data += np.uint16(i).tobytes()
+        out_data += get_len_bytes(data_piece)
 
-            out_data += data_piece
+        out_data += data_piece
 
     out_file.write(out_data)
 

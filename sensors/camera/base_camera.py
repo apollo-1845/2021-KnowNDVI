@@ -49,7 +49,7 @@ class CameraData(Data):
 
     def serialise(self) -> bytes:
         if (self.image is None):
-            return None  # No image - discarded
+            return b""  # No image - discarded
         elif(USE_PNG):
             return self.serialise_save()
         else:
@@ -65,7 +65,7 @@ class CameraData(Data):
 
     @staticmethod
     def deserialise(b):
-        if(b == 0x00):
+        if(b == b""):
             # No image
             return None
         elif(USE_PNG):

@@ -4,7 +4,7 @@ import os
 # Main - timing
 IS_PROD = False
 RUN_MINUTES = 0.5
-SECONDS_PER_ITERATION = 0
+SECONDS_PER_ITERATION = 1
 
 # Processing
 PREFERRED_RESOLUTION = (640, 480)
