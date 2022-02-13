@@ -4,16 +4,18 @@ from sensors.camera.base_camera import CameraData
 from picamera import PiCamera
 import numpy as np
 
+
 class Camera(Sensor):
-    """A physical camera using the Raspberry Pi's PiCamera API"""
+    """A physical camera using the Raspberry Pi's PiCamera API."""
+
     def __init__(self):
-        # initialize camera
+        """Initialize camera."""
         self.camera = PiCamera()
         self.camera.resolution = (640, 480)
         self.camera.start_preview()
 
     def capture_data(self):
-        # capture frames from self.camera
+        """Capture frames from self.camera."""
         output = np.empty((480, 640, 3), dtype=np.uint8)
         self.camera.capture(output, 'rgb')
 
