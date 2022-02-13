@@ -38,10 +38,11 @@ if __name__ == "__main__":
         pass
     # setup
     camera = Camera()
+    camera.current_picture_id = 103
     virtual_time_stamp_sensor = VirtualTimeStampSensor()
     # NOTE: the order matters
     sensors = [virtual_time_stamp_sensor, camera]
-    for i in range(1):
+    for i in range(10):
         # data collection loop
         current_data = []
 
@@ -50,7 +51,7 @@ if __name__ == "__main__":
             current_data.append(sensor.capture_data())
 
         serialised_data_pieces = [d.serialise() for d in current_data]
-        test_camera_data_serialisation(current_data[1], serialised_data_pieces[1])
+        # test_camera_data_serialisation(current_data[1], serialised_data_pieces[1])
         # current_data[1].display()
 
         # record the data into a file

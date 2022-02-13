@@ -1,5 +1,5 @@
 from project_types import Sensor
-from sensors.camera.base_camera import camera
+from sensors.camera.base_camera import CameraData
 
 from picamera import PiCamera
 import numpy as np
@@ -15,7 +15,6 @@ class Camera(Sensor):
     def capture_data(self):
         # capture frames from self.camera
         output = np.empty((480, 640, 3), dtype=np.uint8)
-        camera.capture(output, 'rgb')
+        self.camera.capture(output, 'rgb')
 
-        return CameraData(output)
-
+        return CameraData.from_color_image(output)
