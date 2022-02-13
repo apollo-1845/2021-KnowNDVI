@@ -10,7 +10,7 @@ from sensors.camera.base_camera import CameraData
 class FakeCamera(Sensor):
     """A virtual sensor that mimics a camera using images from the web"""
 
-    current_picture_id = 1
+    current_picture_id = 150
     image = None
 
     def set_id(self, img_id: int):
@@ -40,7 +40,8 @@ class FakeCamera(Sensor):
 
     def capture_data(self):
         """Imitates taking a photo and returns a new CameraData instance"""
+        print(f"Using fake image {self.current_picture_id}")
         self.set_id(self.current_picture_id)
         # we need to get a number 1-250 inclusive, so wrap around
-        self.current_picture_id = (self.current_picture_id + 1) % 249 + 1
+        self.current_picture_id = (self.current_picture_id + 1) % 249
         return CameraData.from_color_image(self.image)

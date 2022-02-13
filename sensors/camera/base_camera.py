@@ -6,7 +6,7 @@ import cv2
 from project_types import Data
 
 from sensors.camera.color_map import fastiecm
-from settings import IS_PROD, PREFERRED_RESOLUTION, PREFERRED_RES_NP, MASK, CAN_DISCARD, USE_PNG
+from settings import IS_PROD, PREFERRED_RESOLUTION, PREFERRED_RES_NP, MASK, CAN_DISCARD, USE_PNG, OUT_DIR
 
 
 # Camera cover mask
@@ -16,11 +16,11 @@ cv2.circle(cam_cover_mask, (320, 240), 250, (255, 255, 255), -1)  # White circle
 
 # PNG image IDs
 save_id = 1
-not_found = os.path.exists(os.path.join(".", "out", str(save_id) + ".png"))
+not_found = os.path.exists(os.path.join(".", "out", str(save_id) + "_nir.png"))
 while (not_found):
     # Does not exist = found
     save_id += 1
-    not_found = os.path.exists(os.path.join(".", "out", str(save_id) + ".png"))
+    not_found = os.path.exists(os.path.join(".", "out", str(save_id) + "_nir.png"))
 print("Image ID:", save_id)
 
 
@@ -49,7 +49,7 @@ class CameraData(Data):
 
     def serialise(self) -> bytes:
         if (self.image is None):
-            return 0x00  # No image - discarded
+            return None  # No image - discarded
         elif(USE_PNG):
             return self.serialise_save()
         else:
@@ -70,8 +70,6 @@ class CameraData(Data):
             return None
         elif(USE_PNG):
             result = CameraData.deserialise_save(b)
-            print("Deserialised", result.image.shape)
-            result.display()
             return result
         else:
             # 3 numbers, 32 bits each
@@ -97,14 +95,12 @@ class CameraData(Data):
         # As JPEG, return image ID
         image_id = save_id
 
-        self.display()
-
         nir, vis = cv2.split(self.image)
-        cv2.imwrite(os.path.join(".", "out", str(image_id) + "_nir.png"), nir)
-        cv2.imwrite(os.path.join(".", "out", str(image_id) + "_vis.png"), vis)
+        cv2.imwrite(os.path.join(OUT_DIR, str(image_id) + "_nir.png"), nir)
+        cv2.imwrite(os.path.join(OUT_DIR, str(image_id) + "_vis.png"), vis)
 
         # Return as bytes; dynamic size based on size of image ID
-        result = int.to_bytes((image_id.bit_length()+7)//8, image_id, byteorder='big')
+        result = int.to_bytes(image_id, length=(image_id.bit_length()+7)//8, byteorder='big')
         print("EN", image_id)
 
         save_id += 1 # Next image
@@ -165,7 +161,6 @@ class CameraData(Data):
     @staticmethod
     def should_discard(image):
         """Discard if (1) completely black"""
-        print("Max: ", np.nanmax(image))
         if(np.nanmax(image) <= 100):
             # Completely black - night - cannot use
             return True
@@ -175,7 +170,6 @@ class CameraData(Data):
         """Use a circular mask to remove camera cover."""
         # Mask out camera cover
         image[cam_cover_mask == 0] = 0
-        print(image.shape, image)
         return image
 
     def extract_channels(image):
