@@ -2,7 +2,7 @@
 import os
 
 # Main - timing
-IS_PROD = False
+IS_PROD = True
 EXPERIMENT_DURATION_MINUTES = 0.5
 SECONDS_PER_ITERATION = 1
 
