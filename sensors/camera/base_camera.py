@@ -1,4 +1,4 @@
-import math
+
 import os
 
 import numpy as np
@@ -12,7 +12,6 @@ from settings import IS_PROD, PREFERRED_RESOLUTION, PREFERRED_RES_NP, MASK, \
 # Camera cover mask
 cam_cover_mask = np.zeros(PREFERRED_RES_NP, dtype="uint8")
 cv2.circle(cam_cover_mask, (320, 240), 250, (255, 255, 255), -1)  # White circle
-
 
 # PNG image IDs
 save_id = 1
@@ -122,24 +121,24 @@ class CameraData(Data):
     def __repr__(self):
         return f"Camera data: {self.image}"
 
-    def display(self):
-        """Create a preview window of the contained image"""
-        img = self.image.copy()
-
-        # Fill the missing colour channel with zeroes so that it can be displayed properly
-        img = np.lib.pad(img, ((0, 0), (0, 0), (0, 1)),
-                         'constant', constant_values=(0))
-
-        # if(len(img.shape) == 2):
-        #     # One channel - apply color map
-        #     img = cv2.applyColorMap(img.astype(np.uint8), fastiecm)
-
-        # Display with cv2
-        title = "Camera image preview"
-        cv2.namedWindow(title)  # create window
-        cv2.imshow(title, img)  # display image
-        cv2.waitKey(0)  # wait for key press
-        cv2.destroyAllWindows()
+    # def display(self): # For testing
+    #     """Create a preview window of the contained image"""
+    #     img = self.image.copy()
+    #
+    #     # Fill the missing colour channel with zeroes so that it can be displayed properly
+    #     img = np.lib.pad(img, ((0, 0), (0, 0), (0, 1)),
+    #                      'constant', constant_values=(0))
+    #
+    #     # if(len(img.shape) == 2):
+    #     #     # One channel - apply color map
+    #     #     img = cv2.applyColorMap(img.astype(np.uint8), fastiecm)
+    #
+    #     # Display with cv2
+    #     title = "Camera image preview"
+    #     cv2.namedWindow(title)  # create window
+    #     cv2.imshow(title, img)  # display image
+    #     cv2.waitKey(0)  # wait for key press
+    #     cv2.destroyAllWindows()
 
     """Onboard Image Processing"""
     def process(image):

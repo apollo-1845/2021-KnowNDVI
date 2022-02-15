@@ -9,12 +9,7 @@ from settings import OUT_FILE, IS_PROD, EXPERIMENT_DURATION_MINUTES, SECONDS_PER
 
 # Import sensors
 from sensors.timestamp import TimeStampVirtualSensor
-
-if IS_PROD:
-    from sensors.camera.camera import Camera
-else:
-    # Use testing camera
-    from sensors.camera.fake_camera import FakeCamera as Camera
+from sensors.camera.camera import Camera
 
 
 def test_camera_data_serialisation(original, serialised):
