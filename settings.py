@@ -2,8 +2,8 @@
 import os
 
 # Main - timing
-IS_PROD = False
-EXPERIMENT_DURATION_MINUTES = 0.5
+IS_PROD = True
+EXPERIMENT_DURATION_MINUTES = 3 * 60
 SECONDS_PER_ITERATION = 1
 
 # Processing
@@ -20,6 +20,11 @@ CAN_DISCARD = True
 # Larger data set:
 # Discard, no PNG - 26M
 # Discard, PNG - 23M
+#
+# 10 pictures take up 2.2M
+# We are allowed to use 3G = 2600M (conservatively)
+# Roughly 12000 pictures are allowed
+# 3 hours = 10800 seconds, therefore 1 picture per second should work well
 USE_PNG = True
 
 # Output
