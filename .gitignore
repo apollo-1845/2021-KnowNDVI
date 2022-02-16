@@ -1,5 +1,6 @@
 # The output
-out/
+out/*
+!out/.gitkeep
 
 # IDE
 .idea/
