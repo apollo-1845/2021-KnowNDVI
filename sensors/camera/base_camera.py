@@ -11,7 +11,7 @@ from settings import IS_PROD, PREFERRED_RESOLUTION, PREFERRED_RES_NP, MASK, \
 
 # Camera cover mask
 cam_cover_mask = np.zeros(PREFERRED_RES_NP, dtype="uint8")
-cv2.circle(cam_cover_mask, (320, 240), 250, (255, 255, 255), -1)  # White circle
+cv2.circle(cam_cover_mask, (PREFERRED_RESOLUTION[0]//2, PREFERRED_RESOLUTION[1]//2), PREFERRED_RESOLUTION[1]//2, (255, 255, 255), -1)  # White circle
 
 # PNG image IDs
 save_id = 1
