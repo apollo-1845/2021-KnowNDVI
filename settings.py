@@ -8,8 +8,8 @@ SECONDS_PER_ITERATION = 1
 
 # Processing
 # Resolution from phase 2 guide
-PREFERRED_RESOLUTION = (1296, 972)
-PREFERRED_RES_NP = (972, 1296)  # Reverse - for creating NumPy arrays
+PREFERRED_RESOLUTION = (1312, 976)
+PREFERRED_RES_NP = (976, 1312)  # Reverse - for creating NumPy arrays
 
 MASK = True
 CAN_DISCARD = True
