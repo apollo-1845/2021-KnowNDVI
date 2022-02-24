@@ -95,4 +95,3 @@ if __name__ == "__main__":
             # Get time now
             now_time = datetime.now()
             iteration_index += 1
-    print(end_time, datetime.now())
