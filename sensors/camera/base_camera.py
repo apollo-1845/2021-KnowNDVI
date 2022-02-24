@@ -20,7 +20,6 @@ while not_found:
     # Does not exist = found
     save_id += 1
     not_found = os.path.exists(f"./out/{save_id}_nir.png")
-print("Image ID:", save_id)
 
 
 class CameraData(Data):
@@ -97,7 +96,6 @@ class CameraData(Data):
         # Return as bytes; dynamic size based on size of image ID
         result = int.to_bytes(image_id, length=(image_id.bit_length()+7)//8,
                               byteorder='big')
-        print("Serialised image file id", image_id)
 
         save_id += 1  # Next image
         return result
@@ -107,7 +105,6 @@ class CameraData(Data):
         """Deserialise the image data as a png."""
         # Load from bytes
         load_id = int.from_bytes(b, byteorder='big')
-        print("Deserialised image file id", load_id)
         # As PNG, get from ID
         nir = cv2.imread(os.path.join(".", "out", str(load_id) + "_nir.png"), \
                          cv2.IMREAD_ANYCOLOR)
@@ -153,7 +150,7 @@ class CameraData(Data):
         if CAN_DISCARD:
             # Discard the images if not useful
             if CameraData.should_discard(image):
-                print("Discarding the image")
+                print("Warning: Discarding the image")
                 return None
         return image
 
